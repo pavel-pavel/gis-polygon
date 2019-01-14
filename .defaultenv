@@ -1,1 +1,4 @@
-DATABASE_URI='postgresql://user:password@postgres/tellover'
+DATABASE_URI='postgresql://user:password@localhost/gis_polygon'
+PYTHONBUFFERED='TRUE'
+DEBUG='0'
+DEFAULT_SRID='4326'
