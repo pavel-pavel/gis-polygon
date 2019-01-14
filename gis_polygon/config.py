@@ -1,0 +1,8 @@
+import os
+
+
+SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URI')
+SQLALCHEMY_TRACK_MODIFICATIONS = True
+PROPAGATE_EXCEPTIONS = False
+DEBUG = bool(int(os.getenv('DEBUG', '0')))
+DEFAULT_SRID = int(os.getenv('DEFAULT_SRID'))

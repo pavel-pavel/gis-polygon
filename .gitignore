@@ -1,0 +1,8 @@
+# IDEA
+.idea
+
+# dotenv
+.env
+
+# test config
+gis_polygon/config_test.py
