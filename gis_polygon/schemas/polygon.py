@@ -7,6 +7,7 @@ from marshmallow import fields, post_load, pre_dump, post_dump
 from shapely.ops import transform
 
 from gis_polygon.extensions import ma
+from gis_polygon.models import GisPolygon
 from gis_polygon.schemas.custom_schema_fields import GeomSchemaField
 
 GIS_PROJECTIONS = {
@@ -18,6 +19,9 @@ class PolygonSchema(ma.ModelSchema):
     """
     Схема полигона для валидации, сериализации, десериализации.
     """
+
+    class Meta:
+        model = GisPolygon
 
     polygon_id = fields.Int(attribute='id')
     geom = GeomSchemaField(required=True)

@@ -97,10 +97,11 @@ class PolygonResource(Resource):
                 400 + {"errors": {"geom": ["Not a valid polygon."]}}
                 404
         """
-        polygon = GisPolygon()
-        polygon_validation = PolygonSchema().load(request.json, instance=GisPolygon())
+        polygon_validation = PolygonSchema().load(request.json)
         if polygon_validation.errors:
             abort(400, errors=polygon_validation.errors)
+
+        polygon = polygon_validation.data
 
         db.session.add(polygon)
         db.session.commit()
