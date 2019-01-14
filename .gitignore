@@ -3,6 +3,7 @@
 
 # dotenv
 .env
+.testenv
 
 # test config
 gis_polygon/config_test.py
