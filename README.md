@@ -9,7 +9,7 @@
 6. Запустить `poetry run python -m gis_polygon.manage run`
 
 ## Запуск тестов ##
-1. Настроить конфиг для тестов (инициализировать копией `.config_test.example.py`
+1. Настроить переменные окружения в файле `.testenv` (инициализировать копией `.defaultenv`)
 2. Запустить `poetry run pytest tests`
 
 

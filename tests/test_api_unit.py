@@ -1,5 +1,5 @@
 import pytest
-from flask import json, abort
+from flask import json, abort, current_app
 from geoalchemy2.shape import from_shape
 from shapely.geometry import Polygon, shape
 
@@ -178,10 +178,13 @@ def test_create_polygon_with_projection(monkeypatch, data, expected_code, endpoi
 
 def test_get_polygons(monkeypatch):
     polygon = Polygon([(0, 0), (1, 1), (1, 0)])
-    monkeypatch.setattr(
-        'gis_polygon.api.GisPolygon',
-        MockPolygon(id=1, geom=from_shape(shape(polygon), srid=4326))
-    )
+
+    with app.app_context():
+        monkeypatch.setattr(
+            'gis_polygon.api.GisPolygon',
+            MockPolygon(id=1, geom=from_shape(shape(polygon), srid=current_app.config['DEFAULT_SRID']))
+        )
+
     headers = {'Content-Type': 'application/json'}
     response = get_json('/api/polygon', headers)
     assert response.json == {
@@ -267,10 +270,13 @@ def test_get_polygons(monkeypatch):
 ])
 def test_get_polygons_with_projection(monkeypatch, endpoint, expected_response):
     polygon = Polygon([(0, 0), (1, 1), (1, 0)])
-    monkeypatch.setattr(
-        'gis_polygon.api.GisPolygon',
-        MockPolygon(id=1, geom=from_shape(shape(polygon), srid=4326))
-    )
+
+    with app.app_context():
+        monkeypatch.setattr(
+            'gis_polygon.api.GisPolygon',
+            MockPolygon(id=1, geom=from_shape(shape(polygon), srid=current_app.config['DEFAULT_SRID']))
+        )
+
     headers = {'Content-Type': 'application/json'}
     response = get_json(endpoint, headers)
     assert response.json == expected_response
@@ -330,10 +336,13 @@ def test_get_polygons_with_projection(monkeypatch, endpoint, expected_response):
 ])
 def test_get_polygon_with_projection(monkeypatch, endpoint, expected_response):
     polygon = Polygon([(0, 0), (1, 1), (1, 0)])
-    monkeypatch.setattr(
-        'gis_polygon.api.GisPolygon',
-        MockPolygon(id=1, geom=from_shape(shape(polygon), srid=4326))
-    )
+
+    with app.app_context():
+        monkeypatch.setattr(
+            'gis_polygon.api.GisPolygon',
+            MockPolygon(id=1, geom=from_shape(shape(polygon), srid=current_app.config['DEFAULT_SRID']))
+        )
+
     headers = {'Content-Type': 'application/json'}
     response = get_json(endpoint, headers)
     assert response.json == expected_response
@@ -341,10 +350,13 @@ def test_get_polygon_with_projection(monkeypatch, endpoint, expected_response):
 
 def test_get_polygon(monkeypatch):
     polygon = Polygon([(0, 0), (1, 1), (1, 0)])
-    monkeypatch.setattr(
-        'gis_polygon.api.GisPolygon',
-        MockPolygon(id=1, geom=from_shape(shape(polygon), srid=4326))
-    )
+
+    with app.app_context():
+        monkeypatch.setattr(
+            'gis_polygon.api.GisPolygon',
+            MockPolygon(id=1, geom=from_shape(shape(polygon), srid=current_app.config['DEFAULT_SRID']))
+        )
+
     headers = {'Content-Type': 'application/json'}
     response = get_json('/api/polygon/1', headers)
     assert response.json == {
@@ -383,10 +395,11 @@ def test_get_polygon(monkeypatch):
 def test_edit_polygon(monkeypatch, data, expected_code):
     polygon = Polygon([(0, 0), (1, 1), (1, 0)])
 
-    monkeypatch.setattr(
-        'gis_polygon.api.GisPolygon',
-        MockPolygon(id=1, geom=from_shape(shape(polygon), srid=4326))
-    )
+    with app.app_context():
+        monkeypatch.setattr(
+            'gis_polygon.api.GisPolygon',
+            MockPolygon(id=1, geom=from_shape(shape(polygon), srid=current_app.config['DEFAULT_SRID']))
+        )
 
     monkeypatch.setattr(
         'gis_polygon.api.db',

@@ -44,6 +44,7 @@ class PolygonResource(Resource):
 
         polygon = GisPolygon.query.get_or_404(polygon_id)
 
+        logger.info('polygon {0} was received'.format(polygon.id))
         return PolygonSchema().dump(polygon)
 
     def get_polygons(self):
@@ -72,6 +73,7 @@ class PolygonResource(Resource):
                 404
         """
         polygons = GisPolygon.query.all()
+        logger.info('all polygons was received')
         return PolygonSchema(many=True).dump(polygons)
 
     def post(self):
@@ -100,10 +102,12 @@ class PolygonResource(Resource):
         polygon = GisPolygon()
         polygon_validation = PolygonSchema().load(request.json, instance=GisPolygon())
         if polygon_validation.errors:
+            logger.debug('validation error, polygon creation cancelled')
             abort(400, errors=polygon_validation.errors)
 
         db.session.add(polygon)
         db.session.commit()
+        logger.info('polygon {0} was created'.format(polygon.id))
         return {'info': 'ok'}
 
     def put(self, polygon_id: int):
@@ -132,11 +136,14 @@ class PolygonResource(Resource):
         polygon = GisPolygon.query.get_or_404(polygon_id)
         polygon_validation = PolygonSchema().load(request.json, instance=polygon)
         if polygon_validation.errors:
+            logger.debug('validation error, polygon editing cancelled')
             abort(400, errors=polygon_validation.errors)
 
         polygon._edited = datetime.now()
         db.session.add(polygon)
         db.session.commit()
+
+        logger.info('polygon {0} was edited'.format(polygon_id))
         return {'info': 'ok'}
 
     def delete(self, polygon_id: int):
@@ -153,6 +160,7 @@ class PolygonResource(Resource):
         polygon = GisPolygon.query.get_or_404(polygon_id)
         db.session.delete(polygon)
         db.session.commit()
+        logger.info('polygon {0} was deleted'.format(polygon_id))
         return {'info': 'ok'}
 
 
