@@ -11,3 +11,7 @@
 ## Запуск тестов ##
 1. Настроить конфиг для тестов (инициализировать копией `.config_test.example.py`
 2. Запустить `poetry run pytest tests`
+
+
+## Коллекция запросов для REST-клиентов ##
+https://www.getpostman.com/collections/0926d5b57762f9ef8d70
