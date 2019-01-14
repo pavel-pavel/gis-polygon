@@ -23,13 +23,12 @@ def configure_app(app, testing=False):
     Конфигурирует приложение.
     """
     # default configuration
-
+    app.config.from_object('gis_polygon.config')
     if testing is True:
         # override with testing config
-        app.config.from_object('gis_polygon.config_test.Config')
+        app.config.from_envvar('TEST_CONFIG', silent=True)
     else:
         # override with env variable, fail silently if not set
-        app.config.from_object('gis_polygon.config')
         app.config.from_envvar('SERVER_CONFIG', silent=True)
 
 
