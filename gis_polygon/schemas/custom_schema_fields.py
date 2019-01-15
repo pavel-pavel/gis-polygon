@@ -18,7 +18,10 @@ class GeomSchemaField(fields.Field):
     }
 
     def _serialize(self, value: WKBElement, attr: str, obj, **kwargs):
-        serialized = json.loads(geojson.dumps(to_shape(value)))
+        try:
+            serialized = json.loads(geojson.dumps(to_shape(value)))
+        except ValueError:
+            return None
         return serialized
 
     def _deserialize(self, value, attr: str, data, **kwargs):

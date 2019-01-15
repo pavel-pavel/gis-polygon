@@ -3,6 +3,7 @@ from functools import partial
 
 from flask import request
 from flask_restful import abort
+from geoalchemy2.shape import to_shape, from_shape
 from marshmallow import fields, post_load, pre_dump, post_dump
 from shapely.ops import transform
 
@@ -22,12 +23,11 @@ class PolygonSchema(ma.ModelSchema):
 
     class Meta:
         model = GisPolygon
+        fields = ('polygon_id', 'geom', 'name', 'props', 'class_id')
 
-    polygon_id = fields.Int(attribute='id')
+    polygon_id = ma.Int(attribute='id')
     geom = GeomSchemaField(required=True)
-    name = fields.Str()
-    props = fields.Raw(allow_none=True)
-    class_id = fields.Int()
+    props = ma.Raw(allow_none=True)
 
     def _get_projection(self, args):
         """
@@ -56,7 +56,7 @@ class PolygonSchema(ma.ModelSchema):
                 pyproj.Proj(init=user_projection),
                 pyproj.Proj(init='epsg:4326')
             )
-            polygon.geom = transform(project, polygon.geom)
+            polygon.geom = from_shape(transform(project, to_shape(polygon.geom)))
 
     @pre_dump
     def dump_polygon(self, polygon):
@@ -67,8 +67,7 @@ class PolygonSchema(ma.ModelSchema):
                 pyproj.Proj(init='epsg:4326'),
                 pyproj.Proj(init=user_projection)
             )
-            polygon.geom = transform(project, polygon.geom)
-        return polygon
+            polygon.geom = from_shape(transform(project, to_shape(polygon.geom)))
 
     @post_dump(pass_many=True)
     def dump_polygons(self, polygons, is_collection):

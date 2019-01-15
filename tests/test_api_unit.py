@@ -230,11 +230,7 @@ def test_get_polygons(monkeypatch):
                 {
                     'polygon_id': 1,
                     'class_id': None,
-                    'geom':
-                        {
-                            'type': 'Polygon',
-                            'coordinates': [[[0.0, 0.0], [1.0, 1.0], [1.0, 0.0], [0.0, 0.0]]]
-                        },
+                    'geom': None,
                     'props': None,
                     'name': None
                 }
@@ -302,11 +298,7 @@ def test_get_polygons_with_projection(monkeypatch, endpoint, expected_response):
         {
             'polygon_id': 1,
             'class_id': None,
-            'geom':
-                {
-                    'type': 'Polygon',
-                    'coordinates': [[[0.0, 0.0], [1.0, 1.0], [1.0, 0.0], [0.0, 0.0]]]
-                },
+            'geom': None,
             'props': None,
             'name': None
         }
